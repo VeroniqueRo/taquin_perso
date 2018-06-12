@@ -9,14 +9,11 @@ $(document).ready(function () {
         [13, 14, 15, " "]
     ];
 
+    let ligneVide = 3;
+    let colVide = 3;
+
 // Exécution des fonctions
     createPlateau();
-    console.log(estPermutable(2,3));
-    console.log(permute(2,3,3,3));
-
-    $('rowi').onclick(function () {
-        permute(i1,j1,i2,j2)
-    }
 
 
 // Crée le plateau de jeu
@@ -31,15 +28,22 @@ $(document).ready(function () {
 
             for (let j = 0; j < plateau[i].length; j++) {
                 $(".row" + i).append(
-                    "<td class='col"
+                    // "<td class='col"
+                    // + j
+                    "<td onclick='permute("
+                    + i
+                    +","
                     + j
-                    + "'>"
+                    + ")'>"
+                    // + "'>"
                     + plateau[i][j]
                     + "</td>"
                 );
             }
         }
     }
+
+    
 
 // Teste si la cellule est vide
     function celluleEstVide(i,j) {
@@ -51,7 +55,7 @@ $(document).ready(function () {
     }
 
 // Teste si la cellule existe
-    function celluleExiste(i, j) {
+    function celluleExiste(i,j) {
 
         if ((i > 0 && i <= plateau.length) && (j > 0 && j <= plateau.length)) {
             return true;
@@ -76,19 +80,40 @@ $(document).ready(function () {
         return false;
     }
 
-    // Fonction qui permutte deux cases
-    function permute (i1,j1,i2,j2) {
+// Fonction qui permute deux cases
+function permute (i,j) {
 
-        let caseInitiale1=tableau[i1][j1];
-        let caseInitiale2=tableau[i2][j2];
-        let newCase1;
-        let newCase2;
+        // Mise en tampon des coordonnées de la case vide
+        let ligneTampon = ligneVide;
+        let colTampon = colVide;
 
-        if ((estPermuttable(i1,j1) || estPermuttable(i2,j2))) {
-            newCase1=i2;
-            newCase2=j2;        }
+        console.log(i,j,ligneVide,colVide);
 
-        createPlateau();
+        if (estPermutable(i,j)) {
+
+            // coordonnées case vide relmplacées par coordonnées cellule cliquée
+            ligneVide = i;
+            colVide = j;
+            plateau [ligneVide][colVide] = plateau [i][j];
+
+            // coordonnées ligne cliquée remplacée par cellule vide
+            i = ligneTampon;
+            j = colTampon;
+            plateau [i][j] = plateau [ligneTampon][colTampon];
+        
+            console.log(i,j,ligneVide,colVide);
+            console.log(plateau [ligneVide][colVide]);
+            console.log(plateau [i][j]);
+            console.log(plateau);
+            // Réécriture du plateau
+            // let plateau = [
+            //     [1, 2, 3, 4],
+            //     [5, 6, 7, 8],
+            //     [9, 10, 11, 12],
+            //     [13, 14, 15, " "]
+            // ];
+
+        }  
     }
 
     // $('#initial').on('click',function () {
