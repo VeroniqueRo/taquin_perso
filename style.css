@@ -1,0 +1,25 @@
+h1, h2 {
+    text-align: center;
+}
+
+th, td {
+    border: 1px solid darkred;
+    background-color: orange;
+    border-radius: 1em;
+    height:10em;
+    min-width:10em;
+}
+
+table {
+    width: 30em;
+    height: 30em;
+    text-align:center;
+    margin: auto;
+    margin-top: 2em;
+}
+
+.buttons {
+    margin-top: 2em;
+    text-align: center;
+    background-color: black;
+}
