@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 // Déclaration des Variables
-    let taillePlateau = 4;
+
 // Tableau des chiffres du taquin
     let plateau = [
         [1, 2, 3, 4],
@@ -24,6 +24,9 @@ $(document).ready(function () {
                 })
             }
         }
+        $('#melange').click(function () {
+            // melangeAleatoire(plateau);
+        })
     });
 
 //*************************************************************//
@@ -35,6 +38,13 @@ $(document).ready(function () {
             for (let j = 0; j < plateau.length; j++) {
                 $('.row' + i + ' .cas' + j).html(plateau[i][j]);
             }
+        }
+    };
+
+    function redessinePlateauAleatoire(tabSimple) {
+        for (let i = 0; i < tabSimple.length; i++) {
+                console.log(tabSimple[i]);
+            $('.cas' + i).html(tabSimple[i]);
         }
     };
 
@@ -80,7 +90,7 @@ $(document).ready(function () {
         return false;
     };
 
-    // Fonction qui permute une cellule pleine avec une cellule vide
+    // Permute une cellule pleine avec une cellule vide
     function permute(i, j) {
         // où est la case vide ?
         let caseVide = chercheCaseVide(); // retourne un objet
@@ -101,4 +111,60 @@ $(document).ready(function () {
             redessinePlateau();
         }
     };
+
+//*************************************************************//
+//                 Zône de tests !!! DANGER
+//*************************************************************//
+
+    // permuteAleatoire();
+
+    creeNombreAleatoire(0,16)
+
+    // Crée un nombre aléatoire
+    function creeNombreAleatoire(min, max) {
+        let x = Math.floor(Math.random() * (max - min) + min);
+        // return x;
+        console.log(x);
+    }
+
+    // Permute 50 fois le tableau
+    function permuteAleatoire() {
+
+
+        // génération de x et y alétoire
+
+        // lancer 50 fois la fonction permute avec les x et y aléatoire générés
+        for (let a = 0; a <= 50; a++) {
+
+            let x;
+            let y;
+
+            permute(x,y);
+        }
+    }
+
+    // Mélange le tableau aléatoirement
+    function melangeAleatoire(plateau) {
+
+        let tabSimple = [];
+        for (let i = 0; i < plateau.length; i++) {
+            for (let j = 0; j < plateau.length; j++) {
+                tabSimple.push(plateau[i][j]);
+            }
+        }
+        // console.log(tabSimple);
+
+            for (var x = tabSimple.length - 1; x > 0; x--) {
+                var rand = Math.floor(Math.random() * (x + 1));
+                var temp = tabSimple[x];
+
+                tabSimple[x] = tabSimple[rand];
+                tabSimple[rand] = temp;
+            }
+            //console.log(tabSimple);
+            redessinePlateauAleatoire(tabSimple);
+        }
+
+
+
 });// Fin du document pas touche
