@@ -9,62 +9,75 @@ $(document).ready(function () {
         [13, 14, 15, " "]
     ];
 
-    let ligneVide = 3;
-    let colVide = 3;
-
 // Exécution des fonctions
-    createPlateau();
+// createPlateau();
+    chercheCaseVide(plateau);
+
+//*************************************************************//
+//               JQuery - Manipulation du DOM
+// *************************************************************//
+
+// Crée le plateau de jeu initial
 
 
-// Crée le plateau de jeu
-    function createPlateau() {
 
+    $('#initial').on('click',function () {
+        $('#initial').off('click');
         for (let i = 0; i < plateau.length; i++) {
-            $(".plateau").append(
-                "<tr class='row"
-                + i
-                + "'></tr>"
-            );
-
             for (let j = 0; j < plateau[i].length; j++) {
-                $(".row" + i).append(
-                    // "<td class='col"
-                    // + j
-                    "<td onclick='permute("
-                    + i
-                    +","
-                    + j
-                    + ")'>"
-                    // + "'>"
-                    + plateau[i][j]
-                    + "</td>"
-                );
+                $(".row" + i + " .case" + j).append(plateau[i][j]);
+                $('.row' + i + ' .case' + j).click(function () {
+                    permute(i,j);
+                })
             }
         }
-    }
+    });
 
-    
+//*************************************************************//
+//                    JavaScript - Factory
+//*************************************************************//
 
-// Teste si la cellule est vide
+    function draw() {
+        for (let i = 0; i < plateau.length; i++) {
+            for (let j = 0; j < plateau.length; j++) {
+                $('.row' + i + ' .cas' + j).html( plateau[i][j]);
+
+            }
+        }
+    };
+
+    // Cherche quelle est la table vide
+    function chercheCaseVide () {
+        for (let i = 0; i < plateau.length; i++) {
+            for (let j = 0; j < plateau[i].length; j++) {
+
+                if (plateau[i][j] === " ") {
+                    return {"i":i,"j":j};
+                }
+            }
+        }
+    };
+
+    // Teste si la cellule est vide
     function celluleEstVide(i,j) {
 
         if (plateau[i][j] === " ") {
+            $("this").addClass("celluleVide");
             return true;
         }
         return false;
-    }
+    };
 
-// Teste si la cellule existe
+    // Teste si la cellule existe
     function celluleExiste(i,j) {
 
         if ((i > 0 && i <= plateau.length) && (j > 0 && j <= plateau.length)) {
             return true;
         }
         return false;
-    }
+    };
 
-
-// Teste si la cellule est permuttable
+    // Teste si la cellule est permutable (qu'elle est pleine et voisine de la vide)
     function estPermutable(i,j) {
 
         if (celluleEstVide(i,j)) {
@@ -78,62 +91,27 @@ $(document).ready(function () {
                 return true;
             }
         return false;
-    }
+    };
 
-// Fonction qui permute deux cases
-function permute (i,j) {
+    // Fonction qui permute une cellule pleine avec une cellule vide
+    function permute(i, j) {
+        // où est la case vide ?
+        let emptyCase = chercheCaseVide(); // retourne un objet
 
-        // Mise en tampon des coordonnées de la case vide
-        let ligneTampon = ligneVide;
-        let colTampon = colVide;
+        // est-ce permutable ?
+        let casePerm = estPermutable(i,j);
 
-        console.log(i,j,ligneVide,colVide);
+        //récupère la valeur de la cellule pleine
+        let fullCase = plateau[i][j];
 
-        if (estPermutable(i,j)) {
+        //récupére la valeur de la cellule vide
+        let newEmptyCase = plateau[emptyCase.i][emptyCase.j]; // nomVariable.clé car objet
 
-            // coordonnées case vide relmplacées par coordonnées cellule cliquée
-            ligneVide = i;
-            colVide = j;
-            plateau [ligneVide][colVide] = plateau [i][j];
-
-            // coordonnées ligne cliquée remplacée par cellule vide
-            i = ligneTampon;
-            j = colTampon;
-            plateau [i][j] = plateau [ligneTampon][colTampon];
-        
-            console.log(i,j,ligneVide,colVide);
-            console.log(plateau [ligneVide][colVide]);
-            console.log(plateau [i][j]);
-            console.log(plateau);
-            // Réécriture du plateau
-            // let plateau = [
-            //     [1, 2, 3, 4],
-            //     [5, 6, 7, 8],
-            //     [9, 10, 11, 12],
-            //     [13, 14, 15, " "]
-            // ];
-
-        }  
-    }
-
-    // $('#initial').on('click',function () {
-    //
-    //     for (let i = 0; i < tuiles.length; i++) {
-    //         $(".plateau").append(
-    //             "<tr class='row"
-    //             +i
-    //             +"'></tr>");
-    //
-    //         for (let j = 0; j < tuiles[i].length; j++) {
-    //             $(".row"+i).append(
-    //                 "<td class='col"
-    //                 +j
-    //                 +"'>"
-    //                 +tuiles[i][j]
-    //                 +"</td>"
-    //
-    //             );
-    //         }
-    //     } $('#initial').off('click');
-    // });
-});
+        // permuter
+        if(casePerm === true){
+            plateau[i][j]= newEmptyCase;
+            plateau[emptyCase.i][emptyCase.j] = fullCase ;
+            draw();
+        }
+    };
+});// Fin du document pas touche
