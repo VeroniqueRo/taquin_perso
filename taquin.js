@@ -23,7 +23,8 @@ $(document).ready(function () {
 
 
     $('#initial').on('click',function () {
-        // $('#initial').off('click');
+        $('#initial').off('click');
+        $('#initial').hide();
         for (let i = 0; i < plateauRef.length; i++) {
             for (let j = 0; j < plateauRef.length; j++) {
                 $(".row" + i + " .cas" + j).append(plateauRef[i][j]);
