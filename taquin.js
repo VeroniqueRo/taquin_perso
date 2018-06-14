@@ -19,9 +19,11 @@ $(document).ready(function () {
 //*************************************************************//
 //               JQuery - Manipulation du DOM
 // *************************************************************//
+//     initialisePlateau(plateauRef);
+
 
     $('#initial').on('click',function () {
-        $('#initial').off('click');
+        // $('#initial').off('click');
         for (let i = 0; i < plateauRef.length; i++) {
             for (let j = 0; j < plateauRef.length; j++) {
                 $(".row" + i + " .cas" + j).append(plateauRef[i][j]);
@@ -39,11 +41,27 @@ $(document).ready(function () {
             permuteAleatoire(50);
         });
 
+        $('#recharge').click(function () {
+            $('td').empty();
+        });
+
+        // initialisePlateau(plateauRef) {
+
     });
 
 //*************************************************************//
 //                    JavaScript - Factory
 //*************************************************************//
+
+    // initialise selon le tableau initial
+    function initialisePlateau(plateauRef) {
+        for (let i = 0; i < plateauRef.length; i++) {
+            for (let j = 0; j < plateauRef.length; j++) {
+                $('.row' + i + ' .cas' + j).append(plateau[i][j]);
+                chercheCaseVide();
+            }
+        }
+    };
 
     function redessinePlateau() {
         for (let i = 0; i < plateau.length; i++) {
@@ -122,6 +140,10 @@ $(document).ready(function () {
         }
     };
 
+    //*************************************************************//
+    //   Mélange aléatoire total - pas forcément résolvable
+    //*************************************************************//
+
     // Mélange le tableau aléatoirement
     function melangeAleatoire(plateau) {
 
@@ -139,12 +161,11 @@ $(document).ready(function () {
             tabSimple[x] = tabSimple[rand];
             tabSimple[rand] = temp;
         }
-        chercheCaseVide();
         creeTableau2D(tabSimple);
         redessinePlateau();
     }
 
-    // Refaire un tableau multidimentionnel avec un tableau simple
+    // Refait un tableau multidimentionnel avec un tableau simple
     function creeTableau2D (tabSimple)  {
 
         for (let i = 0; i < plateau.length; i++) {
@@ -154,6 +175,10 @@ $(document).ready(function () {
             }
         } return plateau;
     }
+
+    //*************************************************************//
+    //   Mélange aléatoire sur tableau de reférénce - résolvable
+    //*************************************************************//
 
     // Crée un nombre aléatoire
     function creeNombreAleatoire(min, max) {
@@ -169,16 +194,15 @@ $(document).ready(function () {
             do {
                 i = creeNombreAleatoire(0, plateau.length);
                 j = creeNombreAleatoire(0, plateau.length);
-            } while (estPermutable(i, j) === false)
+
+            } while (estPermutable(i, j) === false);
+
             console.log(a);
             console.log(plateau[i][j]);
             permute(i, j);
         }
     }
 
-//*************************************************************//
-//                 Zône de tests !!! DANGER
-//*************************************************************//
 
 
 
