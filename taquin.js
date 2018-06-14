@@ -1,7 +1,12 @@
 $(document).ready(function () {
 
 // Déclaration des Variables
-
+    let plateauRef = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, " "]
+    ];
 // Tableau des chiffres du taquin
     let plateau = [
         [1, 2, 3, 4],
@@ -10,23 +15,30 @@ $(document).ready(function () {
         [13, 14, 15, " "]
     ];
 
+
 //*************************************************************//
 //               JQuery - Manipulation du DOM
 // *************************************************************//
 
     $('#initial').on('click',function () {
         $('#initial').off('click');
-        for (let i = 0; i < plateau.length; i++) {
-            for (let j = 0; j < plateau.length; j++) {
-                $(".row" + i + " .cas" + j).append(plateau[i][j]);
+        for (let i = 0; i < plateauRef.length; i++) {
+            for (let j = 0; j < plateauRef.length; j++) {
+                $(".row" + i + " .cas" + j).append(plateauRef[i][j]);
+                    chercheCaseVide();
                 $('.row' + i + ' .cas' + j).click(function () {
                     permute(i,j);
                 })
             }
         }
         $('#melange').click(function () {
-            // melangeAleatoire(plateau);
-        })
+            melangeAleatoire(plateau);
+        });
+
+        $('#permute').click(function () {
+            permuteAleatoire(50);
+        });
+
     });
 
 //*************************************************************//
@@ -37,27 +49,24 @@ $(document).ready(function () {
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau.length; j++) {
                 $('.row' + i + ' .cas' + j).html(plateau[i][j]);
+                chercheCaseVide();
             }
-        }
-    };
-
-    function redessinePlateauAleatoire(tabSimple) {
-        for (let i = 0; i < tabSimple.length; i++) {
-                console.log(tabSimple[i]);
-            $('.cas' + i).html(tabSimple[i]);
         }
     };
 
     // Cherche quelle est la table vide
     function chercheCaseVide () {
+        let objet;
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau.length; j++) {
                 if (plateau[i][j] === " ") {
-
-                    return {"i":i,"j":j};
+                    $('.row' + i + ' .cas' + j).addClass("celluleVide");
+                    objet = {"i":i,"j":j};
+                } else {
+                    $('.row' + i + ' .cas' + j).removeClass("celluleVide");
                 }
             }
-        }
+        } return objet;
     };
 
     // Teste si la cellule est vide
@@ -108,43 +117,10 @@ $(document).ready(function () {
         // permuter
         if(casePerm === true){
             plateau[i][j]= newcaseVide;
-            $('.row' + i + ' .cas' + j).addClass("celluleVide");
             plateau[caseVide.i][caseVide.j] = casePleine ;
-            $('.row' + caseVide.i + ' .cas' + caseVide.j).removeClass("celluleVide");
             redessinePlateau();
         }
     };
-
-//*************************************************************//
-//                 Zône de tests !!! DANGER
-//*************************************************************//
-
-    // permuteAleatoire();
-
-    creeNombreAleatoire(0,16)
-
-    // Crée un nombre aléatoire
-    function creeNombreAleatoire(min, max) {
-        let x = Math.floor(Math.random() * (max - min) + min);
-        // return x;
-        console.log(x);
-    }
-
-    // Permute 50 fois le tableau
-    function permuteAleatoire() {
-
-
-        // génération de x et y alétoire
-
-        // lancer 50 fois la fonction permute avec les x et y aléatoire générés
-        for (let a = 0; a <= 50; a++) {
-
-            let x;
-            let y;
-
-            permute(x,y);
-        }
-    }
 
     // Mélange le tableau aléatoirement
     function melangeAleatoire(plateau) {
@@ -156,17 +132,59 @@ $(document).ready(function () {
             }
         }
         // console.log(tabSimple);
+        for (var x = tabSimple.length - 1; x > 0; x--) {
+            var rand = Math.floor(Math.random() * (x + 1));
+            var temp = tabSimple[x];
 
-            for (var x = tabSimple.length - 1; x > 0; x--) {
-                var rand = Math.floor(Math.random() * (x + 1));
-                var temp = tabSimple[x];
-
-                tabSimple[x] = tabSimple[rand];
-                tabSimple[rand] = temp;
-            }
-            //console.log(tabSimple);
-            redessinePlateauAleatoire(tabSimple);
+            tabSimple[x] = tabSimple[rand];
+            tabSimple[rand] = temp;
         }
+        chercheCaseVide();
+        creeTableau2D(tabSimple);
+        redessinePlateau();
+    }
+
+    // Refaire un tableau multidimentionnel avec un tableau simple
+    function creeTableau2D (tabSimple)  {
+
+        for (let i = 0; i < plateau.length; i++) {
+            for (let j = 0; j < plateau.length; j++) {
+                let k = plateau.length*i + j;
+                plateau[i][j] = tabSimple[k];
+            }
+        } return plateau;
+    }
+
+    // Crée un nombre aléatoire
+    function creeNombreAleatoire(min, max) {
+        let x = Math.floor(Math.random() * (max - min) + min);
+        return x;
+    }
+
+    // Permute 50 fois le tableau en vérifiant si le mouvement est possible
+    function permuteAleatoire(nbFois) {
+
+        for (let a = 1; a <= nbFois; a++) {
+
+            do {
+                i = creeNombreAleatoire(0, plateau.length);
+                j = creeNombreAleatoire(0, plateau.length);
+            } while (estPermutable(i, j) === false)
+            console.log(a);
+            console.log(plateau[i][j]);
+            permute(i, j);
+        }
+    }
+
+//*************************************************************//
+//                 Zône de tests !!! DANGER
+//*************************************************************//
+
+
+
+
+
+
 
 
 
