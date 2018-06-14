@@ -53,6 +53,7 @@ $(document).ready(function () {
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau.length; j++) {
                 if (plateau[i][j] === " ") {
+
                     return {"i":i,"j":j};
                 }
             }
@@ -107,7 +108,9 @@ $(document).ready(function () {
         // permuter
         if(casePerm === true){
             plateau[i][j]= newcaseVide;
+            $('.row' + i + ' .cas' + j).addClass("celluleVide");
             plateau[caseVide.i][caseVide.j] = casePleine ;
+            $('.row' + caseVide.i + ' .cas' + caseVide.j).removeClass("celluleVide");
             redessinePlateau();
         }
     };

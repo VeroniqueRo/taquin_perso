@@ -26,7 +26,8 @@ td {
 }
 
 .celluleVide {
-    background-color: white;
+    background-color: #1c2227;
+    border: none;
 }
 
 table {
