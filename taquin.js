@@ -35,10 +35,12 @@ $(document).ready(function () {
             }
         }
         $('#melange').click(function () {
+            $('#info').empty();
             melangeAleatoire(plateau);
         });
 
         $('#permute').click(function () {
+            $('#info').empty();
             permuteAleatoire(50);
         });
 
@@ -138,6 +140,7 @@ $(document).ready(function () {
             plateau[i][j]= newcaseVide;
             plateau[caseVide.i][caseVide.j] = casePleine ;
             redessinePlateau();
+            plateauGagnant ();
         }
     };
 
@@ -198,11 +201,29 @@ $(document).ready(function () {
 
             } while (estPermutable(i, j) === false);
 
-            console.log(a);
-            console.log(plateau[i][j]);
+            // console.log(a);
+            // console.log(plateau[i][j]);
             permute(i, j);
         }
     }
+
+
+
+    function plateauGagnant () {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if (plateau[i][j] !== plateauRef[i][j]) {
+                    return false;
+                }
+            }
+        }
+        $('#info').animate({
+            left: '1.5em',
+            opacity: '0.9',
+            height: '15em',
+            width: '15em'
+        }).html("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
+    };
 
 
 
