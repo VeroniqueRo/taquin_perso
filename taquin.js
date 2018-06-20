@@ -5,7 +5,7 @@ $(document).ready(function () {
         [1, 2, 3, 4],
         [5, 6, 7, 8],
         [9, 10, 11, 12],
-        [13, 14, 15, " "]
+        [13, 14, 15, 16]
     ];
 
     // Tableau des chiffres du taquin
@@ -13,7 +13,7 @@ $(document).ready(function () {
         [1, 2, 3, 4],
         [5, 6, 7, 8],
         [9, 10, 11, 12],
-        [13, 14, 15, " "]
+        [13, 14, 15, 16]
     ];
 
 //*************************************************************//
@@ -40,13 +40,12 @@ $(document).ready(function () {
         });
 
         $('#permute').click(function () {
-            $('#info').empty();
             permuteAleatoire(50);
         });
 
         $('#recharge').click(function () {
             $('td').empty();
-            initialisePlateau();
+
         });
 
         $('#resolvable').click(function(){
@@ -86,7 +85,7 @@ $(document).ready(function () {
         let objet;
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau.length; j++) {
-                if (plateau[i][j] === " ") {
+                if (plateau[i][j] === 16) {
                     $('.row' + i + ' .cas' + j).addClass("celluleVide");
                     objet = {"i":i,"j":j};
                 } else {
@@ -99,7 +98,7 @@ $(document).ready(function () {
     // Teste si la cellule est vide
     function celluleEstVide(i,j) {
 
-        if (celluleExiste(i,j) && plateau[i][j] === " ") {
+        if (celluleExiste(i,j) && plateau[i][j] === 16) {
             return true;
         }
         return false;
@@ -215,9 +214,6 @@ $(document).ready(function () {
         let tabSimple = [];
         for (let i = 0; i < plateau2D.length; i++) {
             for (let j = 0; j < plateau2D.length; j++) {
-                if (plateau[i][j]===" ") {
-                    plateau[i][j]=16;
-                }
                 tabSimple.push(plateau2D[i][j]);
             }
         }
@@ -292,10 +288,34 @@ $(document).ready(function () {
                 }
             }
         }
-        $('#info').html("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
+        $('#info').append("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
     };
 
-
+    // // Get the modal
+    //     var modal = document.getElementById('myModal');
+    //
+    // // Get the button that opens the modal
+    //     var btn = document.getElementById("myBtn");
+    //
+    // // Get the <span> element that closes the modal
+    //     var span = document.getElementsByClassName("close")[0];
+    //
+    // // When the user clicks the button, open the modal
+    //     btn.onclick = function() {
+    //         modal.style.display = "block";
+    //     }
+    //
+    // // When the user clicks on <span> (x), close the modal
+    //     span.onclick = function() {
+    //         modal.style.display = "none";
+    //     }
+    //
+    // // When the user clicks anywhere outside of the modal, close it
+    //     window.onclick = function(event) {
+    //         if (event.target == modal) {
+    //             modal.style.display = "none";
+    //         }
+    //     }
 
 
 
