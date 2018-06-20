@@ -1,20 +1,20 @@
 $(document).ready(function () {
 
-// Déclaration des Variables
+    // Déclaration des Variables
     let plateauRef = [
         [1, 2, 3, 4],
         [5, 6, 7, 8],
         [9, 10, 11, 12],
         [13, 14, 15, " "]
     ];
-// Tableau des chiffres du taquin
+
+    // Tableau des chiffres du taquin
     let plateau = [
         [1, 2, 3, 4],
         [5, 6, 7, 8],
         [9, 10, 11, 12],
         [13, 14, 15, " "]
     ];
-
 
 //*************************************************************//
 //               JQuery - Manipulation du DOM
@@ -36,7 +36,7 @@ $(document).ready(function () {
         }
         $('#melange').click(function () {
             $('#info').empty();
-            melangeAleatoire(plateau);
+            melangeAleatoire();
         });
 
         $('#permute').click(function () {
@@ -46,7 +46,12 @@ $(document).ready(function () {
 
         $('#recharge').click(function () {
             $('td').empty();
+            initialisePlateau();
         });
+
+        $('#resolvable').click(function(){
+            compareParite(plateau);
+        })
 
         // initialisePlateau(plateauRef) {
 
@@ -57,7 +62,7 @@ $(document).ready(function () {
 //*************************************************************//
 
     // initialise selon le tableau initial
-    function initialisePlateau(plateauRef) {
+    function initialisePlateau() {
         for (let i = 0; i < plateauRef.length; i++) {
             for (let j = 0; j < plateauRef.length; j++) {
                 $('.row' + i + ' .cas' + j).append(plateau[i][j]);
@@ -66,6 +71,7 @@ $(document).ready(function () {
         }
     };
 
+    // Re-affichage du plateau après jeu
     function redessinePlateau() {
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau.length; j++) {
@@ -111,10 +117,10 @@ $(document).ready(function () {
     // Teste si la cellule est permutable (qu'elle est pleine et voisine de la vide)
     function estPermutable(i,j) {
 
-      if ((celluleExiste(i,j-1) && celluleEstVide(i,j-1)) // gauche
-            || (celluleExiste(i,j+1) && celluleEstVide(i,j+1))// droite
-            || (celluleExiste(i-1,j) && celluleEstVide(i-1,j)) // haut
-            || (celluleExiste(i+1,j) && celluleEstVide(i+1,j))) // bas
+      if ((celluleEstVide(i,j-1)) // gauche
+            || (celluleEstVide(i,j+1))// droite
+            || (celluleEstVide(i-1,j)) // haut
+            || (celluleEstVide(i+1,j))) // bas
             {
                 return true;
             }
@@ -123,22 +129,15 @@ $(document).ready(function () {
 
     // Permute une cellule pleine avec une cellule vide
     function permute(i, j) {
+
         // où est la case vide ?
         let caseVide = chercheCaseVide(); // retourne un objet
-
-        // est-ce permutable ?
-        let casePerm = estPermutable(i,j);
-
-        //récupère la valeur de la cellule pleine
-        let casePleine = plateau[i][j];
-
-        //récupére la valeur de la cellule vide
-        let newcaseVide = plateau[caseVide.i][caseVide.j]; // nomVariable.clé car objet
+        let newcaseVide = plateau[caseVide.i][caseVide.j]; // récupére la valeur de la cellule vide : nomVariable.clé car objet
 
         // permuter
-        if(casePerm === true){
+        if(estPermutable(i,j) === true){
+            plateau[caseVide.i][caseVide.j] = plateau[i][j];
             plateau[i][j]= newcaseVide;
-            plateau[caseVide.i][caseVide.j] = casePleine ;
             redessinePlateau();
             plateauGagnant ();
         }
@@ -149,11 +148,11 @@ $(document).ready(function () {
     //*************************************************************//
 
     // Mélange le tableau aléatoirement
-    function melangeAleatoire(plateau) {
+    function melangeAleatoire() {
 
         let tabSimple = [];
-        for (let i = 0; i < plateau.length; i++) {
-            for (let j = 0; j < plateau.length; j++) {
+        for (let i = 0; i < plateauRef.length; i++) {
+            for (let j = 0; j < plateauRef.length; j++) {
                 tabSimple.push(plateau[i][j]);
             }
         }
@@ -207,8 +206,84 @@ $(document).ready(function () {
         }
     }
 
+    //*************************************************************//
+    //   Tester si le mélange du taquin est résolvable
+    //*************************************************************//
 
+    // Crée un tableau 1D avec un tableau 2D en remplacant la case vide par 16
+    function creeTableau1DSansCaseVide(plateau2D) {
+        let tabSimple = [];
+        for (let i = 0; i < plateau2D.length; i++) {
+            for (let j = 0; j < plateau2D.length; j++) {
+                if (plateau[i][j]===" ") {
+                    plateau[i][j]=16;
+                }
+                tabSimple.push(plateau2D[i][j]);
+            }
+        }
+        return tabSimple;
+    }
 
+    // Calcule la parité de la case vide
+    function pariteCaseVide () {
+
+        let i = chercheCaseVide().i;
+        let j = chercheCaseVide().j;
+        // console.log(i,j);
+        if ((i+j)%2 === 0){
+            console.log("Case vide : Paire");
+            return true;
+        } else
+            console.log("Case vide : Impaire");
+            return false;
+    }
+
+    // Tri le tableau mélangé et en verifie sa parité
+    function triParSelection(plateau) {
+
+        let tmp;
+        let k;
+        let compteur = 0;
+
+        let plateauTest = creeTableau1DSansCaseVide(plateau);
+
+        console.log("Nouveau tableau 1D à trier : " + plateauTest);
+        for(let x = 0; x < plateauTest.length; x++) {
+            k = x;
+            for(let y = x+1; y < plateauTest.length; y++) {
+
+                if(plateauTest[y] < plateauTest[k]) {
+                    k=y;
+                }
+            }
+            if (k !== x) {
+                tmp = plateauTest[k];
+                plateauTest[k] =plateauTest[x];
+                plateauTest[x] = tmp;
+                compteur++;
+                // console.log(tabSimple);
+            }
+        }
+        console.log("Nombre de permutations : " + compteur);
+        if (compteur%2 === 0){
+            console.log("Plateau : Paire");
+            return true;
+        } else
+            console.log("Plateau : Impaire");
+            return false;
+    };
+
+    // Compare les parités de la case vide et du tableau mélangé
+    function compareParite () {
+        if (pariteCaseVide()===triParSelection(plateau)) {
+            console.log("Le jeu est résolvable");
+            return true;
+        } else
+            console.log("Le jeu n'est pas résolvable. Remélanger");
+            return false;
+    }
+
+    // Vérifie si le plateau en cours est gagnant
     function plateauGagnant () {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -217,12 +292,7 @@ $(document).ready(function () {
                 }
             }
         }
-        $('#info').animate({
-            left: '1.5em',
-            opacity: '0.9',
-            height: '15em',
-            width: '15em'
-        }).html("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
+        $('#info').html("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
     };
 
 

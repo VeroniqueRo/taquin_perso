@@ -58,9 +58,9 @@ table {
 }
 #info
 {
-    margin-top: 10em;
+    margin-top: 6em;
     position:absolute;
     text-align:center;
     z-index:50;
-    padding: 3em 3em 3em;
+    padding: 4em 4em 4em;
 }
