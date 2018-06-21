@@ -40,15 +40,18 @@ $(document).ready(function () {
         });
 
         $('#permute').click(function () {
+            $('#info').empty();
             permuteAleatoire(50);
         });
 
         $('#recharge').click(function () {
+            $('#info').empty();
             $('td').empty();
-
+            // initialisePlateau();
         });
 
         $('#resolvable').click(function(){
+            $('#info').empty();
             compareParite(plateau);
         })
 
@@ -61,14 +64,14 @@ $(document).ready(function () {
 //*************************************************************//
 
     // initialise selon le tableau initial
-    function initialisePlateau() {
-        for (let i = 0; i < plateauRef.length; i++) {
-            for (let j = 0; j < plateauRef.length; j++) {
-                $('.row' + i + ' .cas' + j).append(plateau[i][j]);
-                chercheCaseVide();
-            }
-        }
-    };
+    // function initialisePlateau() {
+    //     for (let i = 0; i < plateauRef.length; i++) {
+    //         for (let j = 0; j < plateauRef.length; j++) {
+    //             $('"#"+1').text('plateauRef[i][j]');
+    //             chercheCaseVide();
+    //         }
+    //     }
+    // };
 
     // Re-affichage du plateau après jeu
     function redessinePlateau() {
@@ -95,7 +98,7 @@ $(document).ready(function () {
         } return objet;
     };
 
-    // Teste si la cellule est vide
+    // Teste si la cellule est vide (la cellule vide est le 16)
     function celluleEstVide(i,j) {
 
         if (celluleExiste(i,j) && plateau[i][j] === 16) {
@@ -210,7 +213,7 @@ $(document).ready(function () {
     //*************************************************************//
 
     // Crée un tableau 1D avec un tableau 2D en remplacant la case vide par 16
-    function creeTableau1DSansCaseVide(plateau2D) {
+    function creeTableau1D(plateau2D) {
         let tabSimple = [];
         for (let i = 0; i < plateau2D.length; i++) {
             for (let j = 0; j < plateau2D.length; j++) {
@@ -241,7 +244,7 @@ $(document).ready(function () {
         let k;
         let compteur = 0;
 
-        let plateauTest = creeTableau1DSansCaseVide(plateau);
+        let plateauTest = creeTableau1D(plateau);
 
         console.log("Nouveau tableau 1D à trier : " + plateauTest);
         for(let x = 0; x < plateauTest.length; x++) {
@@ -271,12 +274,14 @@ $(document).ready(function () {
 
     // Compare les parités de la case vide et du tableau mélangé
     function compareParite () {
+        let texte;
         if (pariteCaseVide()===triParSelection(plateau)) {
-            console.log("Le jeu est résolvable");
-            return true;
+            // console.log("Le jeu est résolvable");
+            $('#info').append("<div class='alert alert-info'>Le jeu est résolvable</div>");
         } else
-            console.log("Le jeu n'est pas résolvable. Remélanger");
-            return false;
+            // console.log("Le jeu n'est pas résolvable. Remélanger");
+            $('#info').append("<div class='alert alert-info'>Le jeu n'est pas résolvable. Remélanger</div>");
+
     }
 
     // Vérifie si le plateau en cours est gagnant
@@ -288,7 +293,7 @@ $(document).ready(function () {
                 }
             }
         }
-        $('#info').append("<div class='alert alert-success'>BRAVO VOUS AVEZ GAGNÉ !</div>");
+        $('#info').append("<div class='alert alert-info'>BRAVO VOUS AVEZ GAGNÉ !</div>");
     };
 
     // // Get the modal
