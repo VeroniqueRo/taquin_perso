@@ -30,6 +30,7 @@ $(document).ready(function () {
                 $(".row" + i + " .cas" + j).append(plateauRef[i][j]);
                     chercheCaseVide();
                 $('.row' + i + ' .cas' + j).click(function () {
+                    $('#info').empty();
                     permute(i,j);
                 })
             }
@@ -55,7 +56,6 @@ $(document).ready(function () {
             compareParite(plateau);
         })
 
-        // initialisePlateau(plateauRef) {
 
     });
 
@@ -274,13 +274,13 @@ $(document).ready(function () {
 
     // Compare les parités de la case vide et du tableau mélangé
     function compareParite () {
-        let texte;
+
         if (pariteCaseVide()===triParSelection(plateau)) {
             // console.log("Le jeu est résolvable");
-            $('#info').append("<div class='alert alert-info'>Le jeu est résolvable</div>");
+            $('#info').html("<div class='alert alert-info'>Le jeu est résolvable</div>");
         } else
             // console.log("Le jeu n'est pas résolvable. Remélanger");
-            $('#info').append("<div class='alert alert-info'>Le jeu n'est pas résolvable. Remélanger</div>");
+            $('#info').html("<div class='alert alert-info'>Le jeu n'est pas résolvable. Remélanger</div>");
 
     }
 
@@ -321,12 +321,6 @@ $(document).ready(function () {
     //             modal.style.display = "none";
     //         }
     //     }
-
-
-
-
-
-
 
 
 });// Fin du document pas touche

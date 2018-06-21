@@ -8,7 +8,7 @@ body {
     background-size:cover;
 }
 
-h1, h2 {
+h1, p {
     text-align: center;
 }
 
@@ -30,7 +30,6 @@ td {
     border: none;
     text-shadow: none;
     color:#1c2227;
-    text: none;
 }
 
 table {
