@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    // Déclaration des Variables
+    // Plateau de référence pour la psition gagnante
     let plateauRef = [
         [1, 2, 3, 4],
         [5, 6, 7, 8],
@@ -8,13 +8,15 @@ $(document).ready(function () {
         [13, 14, 15, 16]
     ];
 
-    // Tableau des chiffres du taquin
+    // Tableau des chiffres du taquin courant
     let plateau = [
         [1, 2, 3, 4],
         [5, 6, 7, 8],
         [9, 10, 11, 12],
         [13, 14, 15, 16]
     ];
+
+    let 
 
 //*************************************************************//
 //               JQuery - Manipulation du DOM
@@ -56,6 +58,10 @@ $(document).ready(function () {
             compareParite(plateau);
         })
 
+        $('#resolution').click(function () {
+            up();
+        });
+
 
     });
 
@@ -90,6 +96,7 @@ $(document).ready(function () {
             for (let j = 0; j < plateau.length; j++) {
                 if (plateau[i][j] === 16) {
                     $('.row' + i + ' .cas' + j).addClass("celluleVide");
+                    $('.row' + i + ' .cas' + j).text(" ");
                     objet = {"i":i,"j":j};
                 } else {
                     $('.row' + i + ' .cas' + j).removeClass("celluleVide");
@@ -148,7 +155,6 @@ $(document).ready(function () {
     //*************************************************************//
     //   Mélange aléatoire total - pas forcément résolvable
     //*************************************************************//
-
     // Mélange le tableau aléatoirement
     function melangeAleatoire() {
 
@@ -184,7 +190,6 @@ $(document).ready(function () {
     //*************************************************************//
     //   Mélange aléatoire sur tableau de reférénce - résolvable
     //*************************************************************//
-
     // Crée un nombre aléatoire
     function creeNombreAleatoire(min, max) {
         let x = Math.floor(Math.random() * (max - min) + min);
@@ -211,7 +216,6 @@ $(document).ready(function () {
     //*************************************************************//
     //   Tester si le mélange du taquin est résolvable
     //*************************************************************//
-
     // Crée un tableau 1D avec un tableau 2D en remplacant la case vide par 16
     function creeTableau1D(plateau2D) {
         let tabSimple = [];
@@ -237,7 +241,7 @@ $(document).ready(function () {
             return false;
     }
 
-    // Tri le tableau mélangé et en verifie sa parité
+    // Tri le tableau mélangé et en vérifie sa parité
     function triParSelection(plateau) {
 
         let tmp;
@@ -247,28 +251,28 @@ $(document).ready(function () {
         let plateauTest = creeTableau1D(plateau);
 
         console.log("Nouveau tableau 1D à trier : " + plateauTest);
+        // Fonction pour trier le tableau
         for(let x = 0; x < plateauTest.length; x++) {
             k = x;
             for(let y = x+1; y < plateauTest.length; y++) {
-
                 if(plateauTest[y] < plateauTest[k]) {
                     k=y;
                 }
             }
+            // Permutation et ajout au compteur si permutation effective
             if (k !== x) {
                 tmp = plateauTest[k];
-                plateauTest[k] =plateauTest[x];
+                plateauTest[k] = plateauTest[x];
                 plateauTest[x] = tmp;
                 compteur++;
-                // console.log(tabSimple);
             }
         }
-        console.log("Nombre de permutations : " + compteur);
+        // Test si le nombre de permutations est paire
         if (compteur%2 === 0){
-            console.log("Plateau : Paire");
+            // console.log("Plateau : Paire");
             return true;
         } else
-            console.log("Plateau : Impaire");
+            // console.log("Plateau : Impaire");
             return false;
     };
 
@@ -284,7 +288,9 @@ $(document).ready(function () {
 
     }
 
-    // Vérifie si le plateau en cours est gagnant
+    //*************************************************************//
+    //   Tester si le plateau en cours est gagnant
+    //*************************************************************//
     function plateauGagnant () {
         for (let i = 0; i < 4; i++) {
             for (let j = 0; j < 4; j++) {
@@ -296,31 +302,34 @@ $(document).ready(function () {
         $('#info').append("<div class='alert alert-info'>BRAVO VOUS AVEZ GAGNÉ !</div>");
     };
 
-    // // Get the modal
-    //     var modal = document.getElementById('myModal');
-    //
-    // // Get the button that opens the modal
-    //     var btn = document.getElementById("myBtn");
-    //
-    // // Get the <span> element that closes the modal
-    //     var span = document.getElementsByClassName("close")[0];
-    //
-    // // When the user clicks the button, open the modal
-    //     btn.onclick = function() {
-    //         modal.style.display = "block";
-    //     }
-    //
-    // // When the user clicks on <span> (x), close the modal
-    //     span.onclick = function() {
-    //         modal.style.display = "none";
-    //     }
-    //
-    // // When the user clicks anywhere outside of the modal, close it
-    //     window.onclick = function(event) {
-    //         if (event.target == modal) {
-    //             modal.style.display = "none";
-    //         }
-    //     }
+    //*************************************************************//
+    //   Résolution automatique du jeu
+    //*************************************************************//
+
+    function possibleMove () {
+
+
+    }
+
+    function clone () {
+
+
+    }
+
+    function up () {
+
+        let caseVide = chercheCaseVide();
+
+        if(caseVide.i-1 >= 0 ){
+            let newcaseVide = plateau[caseVide.i][caseVide.j];
+            plateau[caseVide.i][caseVide.j] = plateau[i-1][j];
+            plateau[i-1][j]= newcaseVide;
+            return plateau;
+        } else {
+            alert("impossible");
+        }
+    };
+
 
 
 });// Fin du document pas touche
