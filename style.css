@@ -12,6 +12,11 @@ h1, p {
     text-align: center;
 }
 
+.texteColor {
+    font-style: italic;
+    color:red;
+}
+
 td {
     border: 1px solid darkred;
     border: groove; 
@@ -57,6 +62,7 @@ table {
     text-align: center;
     background-color: #1c2227;
 }
+
 #info
 {
     width: 98%;

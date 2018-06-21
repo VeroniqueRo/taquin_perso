@@ -16,7 +16,8 @@ $(document).ready(function () {
         [13, 14, 15, 16]
     ];
 
-    let 
+    // Tableau temporaire
+
 
 //*************************************************************//
 //               JQuery - Manipulation du DOM
@@ -36,7 +37,8 @@ $(document).ready(function () {
                     permute(i,j);
                 })
             }
-        }
+        };
+
         $('#melange').click(function () {
             $('#info').empty();
             melangeAleatoire();
@@ -53,13 +55,13 @@ $(document).ready(function () {
             // initialisePlateau();
         });
 
-        $('#resolvable').click(function(){
+        $('#resolvable').click(function () {
             $('#info').empty();
             compareParite(plateau);
-        })
+        });
 
         $('#resolution').click(function () {
-            up();
+            clone();
         });
 
 
@@ -311,24 +313,29 @@ $(document).ready(function () {
 
     }
 
+    // Clone et retourne un tableau à deux dimensions
     function clone () {
-
-
+        let plateauTemp = [[],[],[],[]];
+        for (let i = 0; i < plateau.length; i++) {
+            for (let j = 0; j < plateau[i].length; j++) {
+                 plateauTemp[i][j] = plateau[i][j];
+            }
+        } return plateauTemp;
     }
 
-    function up () {
-
-        let caseVide = chercheCaseVide();
-
-        if(caseVide.i-1 >= 0 ){
-            let newcaseVide = plateau[caseVide.i][caseVide.j];
-            plateau[caseVide.i][caseVide.j] = plateau[i-1][j];
-            plateau[i-1][j]= newcaseVide;
-            return plateau;
-        } else {
-            alert("impossible");
-        }
-    };
+    // function up () {
+    //
+    //     let caseVide = chercheCaseVide();
+    //
+    //     if(caseVide.i-1 >= 0 ){
+    //         let newcaseVide = plateau[caseVide.i][caseVide.j];
+    //         plateau[caseVide.i][caseVide.j] = plateau[i-1][j];
+    //         plateau[i-1][j]= newcaseVide;
+    //         return plateau;
+    //     } else {
+    //         alert("impossible");
+    //     }
+    // };
 
 
 
