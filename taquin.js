@@ -1,36 +1,15 @@
-$(document).ready(function () {
-
-    // Plateau de référence pour la psition gagnante
-    let plateauRef = [
-        [1, 2, 3, 4],
-        [5, 6, 7, 8],
-        [9, 10, 11, 12],
-        [13, 14, 15, 16]
-    ];
-
-    // Tableau des chiffres du taquin courant
-    let plateau = [
-        [1, 2, 3, 4],
-        [5, 6, 7, 8],
-        [9, 10, 11, 12],
-        [13, 14, 15, 16]
-    ];
-
-    // Tableau temporaire
-
-
 //*************************************************************//
 //               JQuery - Manipulation du DOM
 // *************************************************************//
 //     initialisePlateau(plateauRef);
 
-
+    $(document).ready(function () {
     $('#initial').on('click',function () {
         $('#initial').off('click');
         $('#initial').hide();
         for (let i = 0; i < plateauRef.length; i++) {
             for (let j = 0; j < plateauRef.length; j++) {
-                $(".row" + i + " .cas" + j).append(plateauRef[i][j]);
+                $(".row" + i + " .cas" + j).html(plateauRef[i][j]);
                     chercheCaseVide();
                 $('.row' + i + ' .cas' + j).click(function () {
                     $('#info').empty();
@@ -62,14 +41,35 @@ $(document).ready(function () {
         });
 
         $('#resolution').click(function () {
-            DFS(plateau, 5, 1);
+            DFS(plateau, 20, 0);
         });
+
+    });// Fin du document pas touche
 
 //*************************************************************//
 //                    JavaScript - Factory
 //*************************************************************//
 
-    // initialise selon le tableau initial
+    // Plateau de référence pour la psition gagnante
+    let plateauRef = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, 16]
+    ];
+
+    // Tableau des chiffres du taquin courant
+    let plateau = [
+        [1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [13, 14, 15, 16]
+    ];
+
+    // Tableau temporaire
+
+
+// initialise selon le tableau initial
     // function initialisePlateau() {
     //     for (let i = 0; i < plateauRef.length; i++) {
     //         for (let j = 0; j < plateauRef.length; j++) {
@@ -250,7 +250,7 @@ $(document).ready(function () {
 
         let plateauTest = creeTableau1D(plateau);
 
-        console.log("Nouveau tableau 1D à trier : " + plateauTest);
+        // console.log("Nouveau tableau 1D à trier : " + plateauTest);
         // Fonction pour trier le tableau
         for(let x = 0; x < plateauTest.length; x++) {
             k = x;
@@ -269,10 +269,10 @@ $(document).ready(function () {
         }
         // Test si le nombre de permutations est paire
         if (compteur%2 === 0){
-            // console.log("Plateau : Paire");
+            console.log("Plateau : Paire");
             return true;
         } else
-            // console.log("Plateau : Impaire");
+            console.log("Plateau : Impaire");
             return false;
     };
 
@@ -426,6 +426,9 @@ $(document).ready(function () {
 
         if (p > pMax) {
             console.log("Profondeur max atteinte");
+            console.log(p);
+            console.log(pMax);
+
             return false;
         }
 
@@ -436,52 +439,52 @@ $(document).ready(function () {
 
         let etatUp = up(etat);
             if (etatUp) {
-            console.log("etat up :");
-            console.log(etatUp);
             compteur = compteur + 1;
             console.log(compteur);
             p = p + 1;
             let result = DFS (etatUp, pMax, p);
             if (result){
+                console.log("Up");
+                // console.log(etatUp);
                 return true;
             }
         }
 
         let etatLeft = left(etat);
         if (etatLeft) {
-            console.log("etat left :");
-            console.log(etatLeft);
             compteur = compteur + 1;
             console.log(compteur);
             p = p + 1;
             let result = DFS (etatLeft, pMax, p);
             if (result){
+                console.log("Left");
+                // console.log(etatLeft);
                 return true;
             }
         }
 
-        let etatDown = up(etat);
+        let etatDown = down(etat);
         if (etatDown) {
-            console.log("etat down :");
-            console.log(etatDown);
             compteur = compteur + 1;
             console.log(compteur);
             p = p + 1;
             let result = DFS (etatDown, pMax, p);
             if (result){
+                console.log("Downd");
+                // console.log(etatDown);
                 return true;
             }
         }
 
-        let etatRight = up(etat);
+        let etatRight = right(etat);
         if (etatRight) {
-            console.log("etat right :");
-            console.log(etatRight);
             compteur = compteur + 1;
             console.log(compteur);
             p = p + 1;
             let result = DFS (etatRight, pMax, p);
             if (result){
+                console.log("Right");
+                // console.log(etatRight);
                 return true;
             }
         }
@@ -495,4 +498,3 @@ $(document).ready(function () {
 
 
 
-});// Fin du document pas touche
