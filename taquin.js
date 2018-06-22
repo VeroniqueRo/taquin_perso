@@ -61,7 +61,11 @@ $(document).ready(function () {
         });
 
         $('#resolution').click(function () {
-            clone();
+            // clone();
+            // up();
+            // down();
+            // right();
+            left();
         });
 
 
@@ -320,22 +324,75 @@ $(document).ready(function () {
             for (let j = 0; j < plateau[i].length; j++) {
                  plateauTemp[i][j] = plateau[i][j];
             }
-        } return plateauTemp;
+        }
+        console.log(plateauTemp);
+        return plateauTemp;
     }
 
-    // function up () {
-    //
-    //     let caseVide = chercheCaseVide();
-    //
-    //     if(caseVide.i-1 >= 0 ){
-    //         let newcaseVide = plateau[caseVide.i][caseVide.j];
-    //         plateau[caseVide.i][caseVide.j] = plateau[i-1][j];
-    //         plateau[i-1][j]= newcaseVide;
-    //         return plateau;
-    //     } else {
-    //         alert("impossible");
-    //     }
-    // };
+    function up () {
+
+        let caseVide = chercheCaseVide();
+
+        if(caseVide.i-1 >= 0 ){
+            let newcaseVide = plateau[caseVide.i-1][caseVide.j];
+            plateau[caseVide.i-1][caseVide.j] = plateau[caseVide.i][caseVide.j];
+            plateau[caseVide.i][caseVide.j]= newcaseVide;
+
+            console.log(plateau);
+            return plateau;
+
+        } else {
+            alert("impossible");
+        }
+    };
+
+    function down () {
+
+        let caseVide = chercheCaseVide();
+        if(caseVide.i+1 < plateau.length){
+            let newcaseVide = plateau[caseVide.i+1][caseVide.j];
+            plateau[caseVide.i+1][caseVide.j] = plateau[caseVide.i][caseVide.j];
+            plateau[caseVide.i][caseVide.j]= newcaseVide;
+
+            console.log(plateau);
+            return plateau;
+
+        } else {
+            alert("impossible");
+        }
+    };
+
+    function right () {
+
+        let caseVide = chercheCaseVide();
+        if(caseVide.j+1 < plateau.length){
+            let newcaseVide = plateau[caseVide.i][caseVide.j+1];
+            plateau[caseVide.i][caseVide.j+1] = plateau[caseVide.i][caseVide.j];
+            plateau[caseVide.i][caseVide.j]= newcaseVide;
+
+            console.log(plateau);
+            return plateau;
+
+        } else {
+            alert("impossible");
+        }
+    };
+
+    function left () {
+
+        let caseVide = chercheCaseVide();
+        if(caseVide.j-1 >= 0){
+            let newcaseVide = plateau[caseVide.i][caseVide.j-1];
+            plateau[caseVide.i][caseVide.j-1] = plateau[caseVide.i][caseVide.j];
+            plateau[caseVide.i][caseVide.j]= newcaseVide;
+
+            console.log(plateau);
+            return plateau;
+
+        } else {
+            alert("impossible");
+        }
+    };
 
 
 
