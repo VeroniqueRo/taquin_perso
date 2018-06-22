@@ -38,6 +38,7 @@ $(document).ready(function () {
                 })
             }
         };
+    });
 
         $('#melange').click(function () {
             $('#info').empty();
@@ -61,15 +62,8 @@ $(document).ready(function () {
         });
 
         $('#resolution').click(function () {
-            // clone();
-            // up();
-            // down();
-            // right();
-            left();
+            DFS(plateau, 5, 1);
         });
-
-
-    });
 
 //*************************************************************//
 //                    JavaScript - Factory
@@ -180,7 +174,7 @@ $(document).ready(function () {
         }
         creeTableau2D(tabSimple);
         redessinePlateau();
-    }
+    };
 
     // Refait un tableau multidimentionnel avec un tableau simple
     function creeTableau2D (tabSimple)  {
@@ -191,7 +185,7 @@ $(document).ready(function () {
                 plateau[i][j] = tabSimple[k];
             }
         } return plateau;
-    }
+    };
 
     //*************************************************************//
     //   Mélange aléatoire sur tableau de reférénce - résolvable
@@ -200,7 +194,7 @@ $(document).ready(function () {
     function creeNombreAleatoire(min, max) {
         let x = Math.floor(Math.random() * (max - min) + min);
         return x;
-    }
+    };
 
     // Permute 50 fois le tableau en vérifiant si le mouvement est possible
     function permuteAleatoire(nbFois) {
@@ -217,7 +211,7 @@ $(document).ready(function () {
             // console.log(plateau[i][j]);
             permute(i, j);
         }
-    }
+    };
 
     //*************************************************************//
     //   Tester si le mélange du taquin est résolvable
@@ -231,7 +225,7 @@ $(document).ready(function () {
             }
         }
         return tabSimple;
-    }
+    };
 
     // Calcule la parité de la case vide
     function pariteCaseVide () {
@@ -245,7 +239,7 @@ $(document).ready(function () {
         } else
             console.log("Case vide : Impaire");
             return false;
-    }
+    };
 
     // Tri le tableau mélangé et en vérifie sa parité
     function triParSelection(plateau) {
@@ -292,7 +286,7 @@ $(document).ready(function () {
             // console.log("Le jeu n'est pas résolvable. Remélanger");
             $('#info').html("<div class='alert alert-info'>Le jeu n'est pas résolvable. Remélanger</div>");
 
-    }
+    };
 
     //*************************************************************//
     //   Tester si le plateau en cours est gagnant
@@ -312,87 +306,192 @@ $(document).ready(function () {
     //   Résolution automatique du jeu
     //*************************************************************//
 
-    function possibleMove () {
-
-
-    }
+    let compteur = 0;
 
     // Clone et retourne un tableau à deux dimensions
-    function clone () {
+    function clone (plateau) {
         let plateauTemp = [[],[],[],[]];
         for (let i = 0; i < plateau.length; i++) {
             for (let j = 0; j < plateau[i].length; j++) {
-                 plateauTemp[i][j] = plateau[i][j];
+                plateauTemp[i][j] = plateau[i][j];
             }
         }
-        console.log(plateauTemp);
+        // console.log(plateauTemp);
         return plateauTemp;
     }
 
-    function up () {
+    // Verifie si l'état est gagnant
+    function etatGagnant (e) {
+        for (let i = 0; i < 4; i++) {
+            for (let j = 0; j < 4; j++) {
+                if (e[i][j] !== plateauRef[i][j]) {
+                    return false;
+                }
+            }
+        }
+        console.log("Etat gagnant");
+        return true;
+    };
+
+    // Déplace la case vide vers le haut
+    function up (etat) {
+
+        // console.log("etat précédent :" + etat);
 
         let caseVide = chercheCaseVide();
-
         if(caseVide.i-1 >= 0 ){
-            let newcaseVide = plateau[caseVide.i-1][caseVide.j];
-            plateau[caseVide.i-1][caseVide.j] = plateau[caseVide.i][caseVide.j];
-            plateau[caseVide.i][caseVide.j]= newcaseVide;
 
-            console.log(plateau);
-            return plateau;
+            let newEtat = clone(etat);
+
+            let newcaseVide = newEtat[caseVide.i-1][caseVide.j];
+            newEtat[caseVide.i-1][caseVide.j] = newEtat[caseVide.i][caseVide.j];
+            newEtat[caseVide.i][caseVide.j]= newcaseVide;
+
+            // console.log("etat up :" + newEtat);
+            return newEtat;
 
         } else {
-            alert("impossible");
+            return null;
         }
     };
 
-    function down () {
+    // Déplace la case vide vers le bas
+    function down (etat) {
+
+        // console.log("etat précédent :" + etat);
 
         let caseVide = chercheCaseVide();
-        if(caseVide.i+1 < plateau.length){
-            let newcaseVide = plateau[caseVide.i+1][caseVide.j];
-            plateau[caseVide.i+1][caseVide.j] = plateau[caseVide.i][caseVide.j];
-            plateau[caseVide.i][caseVide.j]= newcaseVide;
+        if(caseVide.i+1 < etat.length){
 
-            console.log(plateau);
-            return plateau;
+            let newEtat = clone(etat);
+
+            let newcaseVide = newEtat[caseVide.i+1][caseVide.j];
+            newEtat[caseVide.i+1][caseVide.j] = newEtat[caseVide.i][caseVide.j];
+            newEtat[caseVide.i][caseVide.j]= newcaseVide;
+
+            // console.log("etat down :" + newEtat);
+            return newEtat;
 
         } else {
-            alert("impossible");
+            return null;
         }
     };
 
-    function right () {
+    // Déplace la case vide vers la droite
+    function right (etat) {
+
+        // console.log("etat précédent :" + etat);
 
         let caseVide = chercheCaseVide();
-        if(caseVide.j+1 < plateau.length){
-            let newcaseVide = plateau[caseVide.i][caseVide.j+1];
-            plateau[caseVide.i][caseVide.j+1] = plateau[caseVide.i][caseVide.j];
-            plateau[caseVide.i][caseVide.j]= newcaseVide;
+        if(caseVide.j+1 < etat.length){
 
-            console.log(plateau);
-            return plateau;
+            let newEtat = clone(etat);
+
+            let newcaseVide = newEtat[caseVide.i][caseVide.j+1];
+            newEtat[caseVide.i][caseVide.j+1] = newEtat[caseVide.i][caseVide.j];
+            newEtat[caseVide.i][caseVide.j]= newcaseVide;
+
+            // console.log("etat right :" + newEtat);
+            return newEtat;
 
         } else {
-            alert("impossible");
+            return null;
         }
     };
 
-    function left () {
+    // Déplace la case vide vers la gauche
+    function left (etat) {
+
+        // console.log("etat précédent :" + etat);
 
         let caseVide = chercheCaseVide();
         if(caseVide.j-1 >= 0){
-            let newcaseVide = plateau[caseVide.i][caseVide.j-1];
-            plateau[caseVide.i][caseVide.j-1] = plateau[caseVide.i][caseVide.j];
-            plateau[caseVide.i][caseVide.j]= newcaseVide;
 
-            console.log(plateau);
-            return plateau;
+            let newEtat = clone(etat);
+
+            let newcaseVide = newEtat[caseVide.i][caseVide.j-1];
+            newEtat[caseVide.i][caseVide.j-1] = newEtat[caseVide.i][caseVide.j];
+            newEtat[caseVide.i][caseVide.j]= newcaseVide;
+
+            // console.log("etat left :" + newEtat);
+            return newEtat;
 
         } else {
-            alert("impossible");
+            return null;
         }
     };
+
+    // Recherche DFS
+    function DFS (etat, pMax, p) {
+
+        if (p > pMax) {
+            console.log("Profondeur max atteinte");
+            return false;
+        }
+
+        if (etatGagnant(etat)) {
+            console.log("Taquin résolu");
+            return true;
+        }
+
+        let etatUp = up(etat);
+            if (etatUp) {
+            console.log("etat up :");
+            console.log(etatUp);
+            compteur = compteur + 1;
+            console.log(compteur);
+            p = p + 1;
+            let result = DFS (etatUp, pMax, p);
+            if (result){
+                return true;
+            }
+        }
+
+        let etatLeft = left(etat);
+        if (etatLeft) {
+            console.log("etat left :");
+            console.log(etatLeft);
+            compteur = compteur + 1;
+            console.log(compteur);
+            p = p + 1;
+            let result = DFS (etatLeft, pMax, p);
+            if (result){
+                return true;
+            }
+        }
+
+        let etatDown = up(etat);
+        if (etatDown) {
+            console.log("etat down :");
+            console.log(etatDown);
+            compteur = compteur + 1;
+            console.log(compteur);
+            p = p + 1;
+            let result = DFS (etatDown, pMax, p);
+            if (result){
+                return true;
+            }
+        }
+
+        let etatRight = up(etat);
+        if (etatRight) {
+            console.log("etat right :");
+            console.log(etatRight);
+            compteur = compteur + 1;
+            console.log(compteur);
+            p = p + 1;
+            let result = DFS (etatRight, pMax, p);
+            if (result){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 
 
 
